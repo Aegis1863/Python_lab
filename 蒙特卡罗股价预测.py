@@ -14,7 +14,7 @@ def getonline(code):
     '''
     try:
         import tushare as ts
-        token='d0a0cd40d9e2e7cb3ac55abdd4c90aa6e5455a5ca6d98122b8b8a206'
+        token='自己修改为TuShare Auth'
         pro = ts.pro_api(token)
         df = pro.query('daily',ts_code=code, start_date='20191201', end_date='20200924')
         df.to_csv('练习数据库.csv')#保存数据库
