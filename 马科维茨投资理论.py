@@ -30,7 +30,7 @@ port_returns = []
 port_variance = []
 for p in range(2000): # 2000组随机模拟数据
     weights = np.random.random(len(stocks))
-    weights /=np.sum(weights)
+    weights /= np.sum(weights)
     port_returns.append(np.sum(log_returns.mean()*len(df.index)*weights))
     port_variance.append(np.sqrt(np.dot(weights.T, np.dot(log_returns.cov()*len(df.index), weights))))
 
