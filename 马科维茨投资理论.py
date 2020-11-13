@@ -20,6 +20,7 @@ for stock in stocks:
     print('-'*32)
     log_data = np.array(log_returns[stock])
     normality_test(log_data)
+print()
 
 weights = np.random.random(len(stocks))
 weights /= np.sum(weights) # 投资组合权重
@@ -95,20 +96,23 @@ plt.scatter(target_variance,target_returns, c = target_returns/target_variance, 
 #红星：标记夏普率最大的组合点
 plt.plot(stats(opts['x'])[1], stats(opts['x'])[0], 'r*', markersize = 15.0)
 #黄星：标记方差最小投资组合点
-plt.plot(stats(optv['x'])[1], stats(optv['x'])[0], 'y*', markersize = 15.0)
+plt.plot(stats(optv['x'])[1], stats(optv['x'])[0], 'rs', markersize = 15.0)
 plt.grid(True)
 plt.xlabel('expected volatility')
 plt.ylabel('expected return')
 plt.colorbar(label = 'Sharpe ratio')
 
 # 数据输出(根据实际情况需要修改字段名称)
-print('>> 夏普比率最优组合')
-print('华安策略优选, 国投深证100指数, 广发沪港深新起点股票, 嘉实全球互联网QDII, 上投成长动力')
-print('权重：0,     0.409,         0,                 0.135,             0.456')
-print('预期回报，预期波动率，夏普比率')
-print('0.474,  0.181,    2.615\n\n')
-print('>> 方差最小最优组合')
-print('华安策略优选, 国投深证100指数, 广发沪港深新起点股票, 嘉实全球互联网QDII, 上投成长动力')
-print('权重：0.546, 0,             0,                 0.144,             0.31')
-print('预期回报，预期波动率，夏普比率')
-print('0.381,  0.166,    2.298')
+print('>> 组合1—夏普率最大:')
+print('# 最优投资组合权重向量')
+print(opts['x'].round(3))
+print('# sharpe最大的组合统计数据:')
+print(stats(opts['x']).round(3))
+print()
+print('>> 组合2——方差最小:')
+print('# 最优投资组合权重向量')
+print(optv['x'].round(3))
+print('# 预期收益率、波动率和夏普指数:')
+print(stats(optv['x']).round(3))
+
+
