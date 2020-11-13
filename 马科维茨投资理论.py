@@ -29,7 +29,7 @@ variance_of_troups = np.sqrt(weights, np.dot(log_returns.cov()*len(df.index), we
 
 port_returns = []
 port_variance = []
-for p in range(2000): # 2000组随机模拟数据
+for p in range(50000): # 10000组随机模拟数据
     weights = np.random.random(len(stocks))
     weights /= np.sum(weights)
     port_returns.append(np.sum(log_returns.mean()*len(df.index)*weights))
@@ -76,11 +76,11 @@ optv = sco.minimize(min_variance,
 def min_variance(weights):
     return stats(weights)[1]
 
-#在不同目标收益率水平（target_returns）循环时，最小化的一个约束条件会变化。
+# 在不同目标收益率水平（target_returns）循环时，最小化的一个约束条件会变化。
 target_returns = np.linspace(0.0,0.5,50)
 target_variance = []
 for tar in target_returns:
-    #给定限制条件：给定收益率、投资组合权重之和为1
+    # 给定限制条件：给定收益率、投资组合权重之和为1
     cons = ({'type':'eq','fun':lambda x:stats(x)[0]-tar},{'type':'eq','fun':lambda x:np.sum(x)-1})
     res = sco.minimize(min_variance, x0, method = 'SLSQP', bounds = bnds, constraints = cons)
     target_variance.append(res['fun'])
@@ -88,25 +88,26 @@ for tar in target_returns:
 target_variance = np.array(target_variance)
 
 plt.figure(figsize = (8,4))
-#圆点：随机生成的投资组合散布的点
+# 圆点：随机生成的投资组合散布的点
 plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
 plt.scatter(port_variance, port_returns, c = port_returns/port_variance,marker = 'o')
-#叉号：投资组合有效边界
+# 叉号：投资组合有效边界
 plt.scatter(target_variance,target_returns, c = target_returns/target_variance, marker = 'x')
-#红星：标记夏普率最大的组合点
+# 红星：标记夏普率最大的组合点
 plt.plot(stats(opts['x'])[1], stats(opts['x'])[0], 'r*', markersize = 15.0)
-#黄星：标记方差最小投资组合点
+# 红色正方形：标记方差最小投资组合点
 plt.plot(stats(optv['x'])[1], stats(optv['x'])[0], 'rs', markersize = 15.0)
 plt.grid(True)
 plt.xlabel('expected volatility')
 plt.ylabel('expected return')
 plt.colorbar(label = 'Sharpe ratio')
+plt.show()
 
 # 数据输出(根据实际情况需要修改字段名称)
 print('>> 组合1—夏普率最大:')
 print('# 最优投资组合权重向量')
 print(opts['x'].round(3))
-print('# sharpe最大的组合统计数据:')
+print('# 预期收益率、波动率和夏普指数:')
 print(stats(opts['x']).round(3))
 print()
 print('>> 组合2—方差最小:')
