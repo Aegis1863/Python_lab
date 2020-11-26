@@ -27,9 +27,7 @@ layout = [[sg.Text("请输入题干信息",font='微软雅黑 11')],
           [sg.Text("该题答案",font='微软雅黑 11')],
           [sg.Output(size=(50,7), key='-OUTPUT2-',font='微软雅黑 11')],
           [sg.Text("*注意，不要点查询过快，至少需要间隔一秒钟以上*",font='微软雅黑 11',text_color='red')],
-          [sg.Button('开始查询',font='微软雅黑 11'), sg.Button('退出',font='微软雅黑 11')],
-          [sg.Image(r'C:\Users\LiSunBowen\Desktop\临时工作文件\QR.png')],
-          [sg.Text("↑↑支付宝扫码资助作者喝一瓶农夫山泉叭QAQ",font='微软雅黑 11')]]
+          [sg.Button('开始查询',font='微软雅黑 11'), sg.Button('退出',font='微软雅黑 11')]]
 
 # Create the window
 sg.SetOptions(text_justification='left')
