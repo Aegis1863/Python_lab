@@ -1,5 +1,5 @@
 import random
-b=['林忠','张艺','罗勖','周凌','徐佳','谭红']
+b=['bob','john','luo','jane','jack','ana']
 a=range(1,len(b)+1)
 c=random.sample(a,len(a))
 d=random.sample(b,len(a))

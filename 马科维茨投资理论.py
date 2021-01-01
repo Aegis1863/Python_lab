@@ -4,7 +4,7 @@ import numpy as np
 import scipy.stats as scs
 import scipy.optimize as sco
 
-df = pd.read_excel('多标的价格或净值数据.xlsx') # 参数设定为目标表格路径
+df = pd.read_excel(r'E:\Project\专用数据\多标的价格或净值数据.xlsx') # 参数设定为目标表格路径，格式为：横轴为个股字段，纵向排列股票价格，时间向下递增
 
 log_returns = np.log(df.pct_change()+1)
 log_returns = log_returns.dropna()
@@ -15,7 +15,7 @@ def normality_test(array):
     print('Norm test p-value %14.3f' % scs.normaltest(array)[1])
 
 print('>> P值检验')
-for stock in stocks:
+for stock in stocks: # 检验是否符合正态分布 
     print('\nResults for {}'.format(stock))
     print('-'*32)
     log_data = np.array(log_returns[stock])
@@ -29,7 +29,7 @@ variance_of_troups = np.sqrt(weights, np.dot(log_returns.cov()*len(df.index), we
 
 port_returns = []
 port_variance = []
-for p in range(50000): # 10000组随机模拟数据
+for p in range(10000): # 10000组随机模拟数据
     weights = np.random.random(len(stocks))
     weights /= np.sum(weights)
     port_returns.append(np.sum(log_returns.mean()*len(df.index)*weights))
@@ -87,33 +87,34 @@ for tar in target_returns:
 
 target_variance = np.array(target_variance)
 
+# 数据输出(根据实际情况需要修改字段名称)
+print('>> 组合1—夏普率最大:')
+print('# 最优投资组合权重向量')
+print(opts['x'].round(3))
+print('# 预期收益率、波动率、夏普指数:')
+print(stats(opts['x']).round(3))
+print()
+print('>> 组合2—方差最小:')
+print('# 最优投资组合权重向量')
+print(optv['x'].round(3))
+print('# 预期收益率、波动率、夏普指数:')
+print(stats(optv['x']).round(3))
+
+# 作图
 plt.figure(figsize = (8,4))
-# 圆点：随机生成的投资组合散布的点
 plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
+# 圆点：随机生成的投资组合散布的点 ↓
 plt.scatter(port_variance, port_returns, c = port_returns/port_variance,marker = 'o')
-# 叉号：投资组合有效边界
+# 叉号：投资组合有效边界 ↓
 plt.scatter(target_variance,target_returns, c = target_returns/target_variance, marker = 'x')
-# 红星：标记夏普率最大的组合点
+# 红星：标记夏普率最大的组合点 ↓
 plt.plot(stats(opts['x'])[1], stats(opts['x'])[0], 'r*', markersize = 15.0)
-# 红色正方形：标记方差最小投资组合点
+# 红色正方形：标记方差最小投资组合点 ↓
 plt.plot(stats(optv['x'])[1], stats(optv['x'])[0], 'rs', markersize = 15.0)
 plt.grid(True)
 plt.xlabel('expected volatility')
 plt.ylabel('expected return')
 plt.colorbar(label = 'Sharpe ratio')
 plt.show()
-
-# 数据输出(根据实际情况需要修改字段名称)
-print('>> 组合1—夏普率最大:')
-print('# 最优投资组合权重向量')
-print(opts['x'].round(3))
-print('# 预期收益率、波动率和夏普指数:')
-print(stats(opts['x']).round(3))
-print()
-print('>> 组合2—方差最小:')
-print('# 最优投资组合权重向量')
-print(optv['x'].round(3))
-print('# 预期收益率、波动率和夏普指数:')
-print(stats(optv['x']).round(3))
 
 
