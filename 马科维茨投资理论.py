@@ -3,8 +3,25 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as scs
 import scipy.optimize as sco
+import tushare as ts
 
-df = pd.read_excel(r'E:\Project\专用数据\多标的价格或净值数据.xlsx') # 参数设定为目标表格路径，格式为：横轴为个股字段，纵向排列股票价格，时间向下递增
+ts.set_token('') # 设置为自己的token
+df = pd.DataFrame([])
+stock1 = pd.DataFrame([])
+stock_list = ['600674.SH', '600529.SH', '603589.SH', '600482.SH'] # 修改标的
+for i in stock_list:
+    stock0 = ts.pro_bar(ts_code=i,start_date='20190101',end_date='20201231',adj='qfq')
+    stock0 = stock0[['close','trade_date']]
+    if stock1.empty:
+        stock1 = stock0
+    else:
+        stock1 = pd.merge(left=stock1, right=stock0, how='inner', on=['trade_date'])
+    print(i,' done')
+del stock1['trade_date']
+stock1.columns = stock_list
+df = stock1.iloc[::-1]
+df.index=df.index[::-1]
+# 参数设定为目标表格路径，格式为：横轴为个股字段，纵向排列股票价格，时间向下递增
 
 log_returns = np.log(df.pct_change()+1)
 log_returns = log_returns.dropna()
@@ -29,7 +46,7 @@ variance_of_troups = np.sqrt(weights, np.dot(log_returns.cov()*len(df.index), we
 
 port_returns = []
 port_variance = []
-for p in range(10000): # 10000组随机模拟数据
+for p in range(2000): # 1000组随机模拟数据
     weights = np.random.random(len(stocks))
     weights /= np.sum(weights)
     port_returns.append(np.sum(log_returns.mean()*len(df.index)*weights))
@@ -91,13 +108,13 @@ target_variance = np.array(target_variance)
 print('>> 组合1—夏普率最大:')
 print('# 最优投资组合权重向量')
 print(opts['x'].round(3))
-print('# 预期收益率、波动率、夏普指数:')
+print('# 预期收益率、波动率、夏普比率:')
 print(stats(opts['x']).round(3))
 print()
 print('>> 组合2—方差最小:')
 print('# 最优投资组合权重向量')
 print(optv['x'].round(3))
-print('# 预期收益率、波动率、夏普指数:')
+print('# 预期收益率、波动率、夏普比率:')
 print(stats(optv['x']).round(3))
 
 # 作图
