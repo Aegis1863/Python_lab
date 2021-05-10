@@ -5,7 +5,8 @@ import scipy.stats as scs
 import scipy.optimize as sco
 import tushare as ts
 
-ts.set_token('') # 设置为自己的token
+api = input('输入自己的token：')
+ts.set_token(api) # 设置为自己的token
 df = pd.DataFrame([])
 stock1 = pd.DataFrame([])
 stock_list = ['600674.SH', '600529.SH', '603589.SH', '600482.SH'] # 修改标的
