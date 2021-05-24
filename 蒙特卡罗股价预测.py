@@ -42,7 +42,7 @@ for i in range(1000): # 控制次数
     p = [] # 单次模拟情况
     p.append(pe) # 计入初始股价
     for days in range(1,365): # 控制天数
-        pn = pn + pn*(drt+random.normal(drt, sigs)) # 产生新股价
+        pn = pn + pn*(random.normal(drt, sigs)) # 产生新股价
         if pn < 0.1: # 确保股价大于等于一毛钱
            pn = p[-1]
         p.append(pn)
