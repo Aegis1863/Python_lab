@@ -47,8 +47,8 @@ for i in range(1000): # 控制次数
            pn = p[-1]
         p.append(pn)
     pt.append(p)
-pt = pd.DataFrame(pt).T
-simulations = pt.iloc[-1]
+pt = pd.DataFrame(pt)
+simulations = pt.iloc[-1:]
 
 plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
 plt.subplot(1,2,1)
